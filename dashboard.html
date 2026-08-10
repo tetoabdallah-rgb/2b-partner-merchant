@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f8fafc">
+<title>2B Partner | لوحة التحكم</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.383.0/dist/umd/lucide.min.js"></script>
+
+<style>
+:root {
+  --primary: #4f46e5;
+  --primary-glow: rgba(79, 70, 229, 0.4);
+  --secondary: #10b981;
+  --accent: #f59e0b;
+  --bg-color: #f8fafc;
+  --surface: #ffffff;
+  --surface-hover: #f1f5f9;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --radius-lg: 24px;
+  --radius-md: 16px;
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: 'IBM Plex Sans Arabic', system-ui, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  line-height: 1.5;
+  padding-bottom: 80px; /* Space for bottom nav */
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(253,16%,7%,0.03) 0, transparent 50%), 
+    radial-gradient(at 50% 0%, hsla(225,39%,30%,0.03) 0, transparent 50%), 
+    radial-gradient(at 100% 0%, hsla(339,49%,30%,0.03) 0, transparent 50%);
+  background-attachment: fixed;
+}
+
+h1, h2, h3, h4, .num-font { font-family: 'Outfit', 'IBM Plex Sans Arabic', sans-serif; }
+a { text-decoration: none; color: inherit; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+/* Layout */
+.app-container {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+/* Sidebar (Desktop) */
+.sidebar {
+  display: none;
+  width: 280px;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  padding: 32px 24px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 48px;
+  color: var(--text-main);
+}
+.sidebar-logo-icon {
+  width: 48px; height: 48px;
+  background: linear-gradient(135deg, var(--primary), #3730a3);
+  color: white;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  box-shadow: 0 8px 20px var(--primary-glow);
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  border-radius: 14px;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 16px;
+  transition: 0.3s ease;
+  margin-bottom: 8px;
+}
+.nav-item:hover, .nav-item.active {
+  background: var(--surface-hover);
+  color: var(--primary);
+}
+.nav-item.active {
+  background: rgba(79, 70, 229, 0.08);
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  padding: 24px;
+  padding-bottom: 100px;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.avatar {
+  width: 54px; height: 54px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #fce7f3, #e0e7ff);
+  display: grid;
+  place-items: center;
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 20px;
+  box-shadow: var(--shadow-sm);
+  border: 2px solid white;
+}
+.greeting {
+  display: flex;
+  flex-direction: column;
+}
+.greeting span { color: var(--text-muted); font-size: 14px; font-weight: 500; }
+.greeting strong { font-size: 20px; font-weight: 700; color: var(--text-main); }
+
+.actions {
+  display: flex;
+  gap: 12px;
+}
+.icon-btn {
+  width: 48px; height: 48px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: grid; place-items: center;
+  color: var(--text-main);
+  transition: 0.2s;
+  position: relative;
+}
+.icon-btn:hover { background: var(--surface-hover); }
+.badge {
+  position: absolute;
+  top: 10px; right: 12px;
+  width: 10px; height: 10px;
+  background: #ef4444;
+  border-radius: 50%;
+  border: 2px solid var(--surface);
+}
+
+/* Target Card - Premium Gradient */
+.target-card {
+  background: linear-gradient(135deg, #4f46e5 0%, #312e81 100%);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 40px -10px var(--primary-glow);
+  margin-bottom: 24px;
+}
+.target-card::before {
+  content: '';
+  position: absolute;
+  top: -50%; right: -20%;
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.target-header {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  position: relative; z-index: 2;
+}
+.target-title { font-size: 15px; opacity: 0.9; margin-bottom: 4px; font-weight: 500;}
+.target-amount { font-size: 38px; font-weight: 800; letter-spacing: -1px; }
+
+.tier-badge {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  padding: 6px 14px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex; align-items: center; gap: 6px;
+  border: 1px solid rgba(255,255,255,0.3);
+}
+
+.progress-container { margin-top: 32px; position: relative; z-index: 2;}
+.progress-bar {
+  height: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.progress-fill {
+  height: 100%;
+  width: 72%;
+  background: linear-gradient(90deg, #34d399, #10b981);
+  border-radius: 99px;
+  position: relative;
+}
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.progress-stats {
+  display: flex; justify-content: space-between;
+  font-size: 14px; opacity: 0.9; font-weight: 500;
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  margin-bottom: 32px;
+}
+.stat-card {
+  background: var(--surface);
+  padding: 20px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  display: flex; flex-direction: column; gap: 12px;
+  transition: 0.3s ease;
+}
+.stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.stat-icon {
+  width: 42px; height: 42px;
+  border-radius: 12px;
+  display: grid; place-items: center;
+}
+.stat-card.gold .stat-icon { background: #fef3c7; color: #d97706; }
+.stat-card.blue .stat-icon { background: #e0e7ff; color: #4338ca; }
+
+.stat-title { font-size: 13px; color: var(--text-muted); font-weight: 600; }
+.stat-value { font-size: 26px; font-weight: 800; color: var(--text-main); }
+.stat-sub { font-size: 12px; color: var(--secondary); font-weight: 600; display: flex; align-items: center; gap: 4px; }
+
+/* Horizontal Scroll Section */
+.section-title {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 16px;
+}
+.section-title h3 { font-size: 20px; font-weight: 700; }
+.section-title a { font-size: 14px; color: var(--primary); font-weight: 600; }
+
+.offers-scroll {
+  display: flex; gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 16px;
+  scrollbar-width: none;
+}
+.offers-scroll::-webkit-scrollbar { display: none; }
+
+.offer-card {
+  min-width: 260px;
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+.offer-card::before {
+  content: ''; position: absolute; top: 0; right: 0; width: 4px; height: 100%;
+}
+.offer-card.green::before { background: var(--secondary); }
+.offer-card.accent::before { background: var(--accent); }
+
+.offer-icon {
+  width: 48px; height: 48px; border-radius: 12px;
+  display: grid; place-items: center; margin-bottom: 16px;
+}
+.offer-card.green .offer-icon { background: #d1fae5; color: #059669; }
+.offer-card.accent .offer-icon { background: #fef3c7; color: #d97706; }
+
+.offer-card h4 { font-size: 16px; margin-bottom: 6px; }
+.offer-card p { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
+.offer-card button {
+  width: 100%; padding: 12px; border-radius: 10px;
+  font-weight: 700; font-size: 14px; transition: 0.2s;
+}
+.offer-card.green button { background: #ecfdf5; color: #059669; }
+.offer-card.green button:hover { background: #d1fae5; }
+.offer-card.accent button { background: #fffbeb; color: #d97706; }
+.offer-card.accent button:hover { background: #fef3c7; }
+
+/* Bottom Nav (Mobile) */
+.bottom-nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--glass-border);
+  display: flex;
+  justify-content: space-around;
+  padding: 12px 16px 24px;
+  z-index: 100;
+}
+
+.bottom-nav-item {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  color: var(--text-muted);
+  font-size: 12px; font-weight: 600;
+  transition: 0.3s var(--ease-spring);
+  position: relative;
+}
+.bottom-nav-item i { transition: 0.3s var(--ease-spring); }
+.bottom-nav-item.active { color: var(--primary); }
+.bottom-nav-item.active i { transform: translateY(-4px); }
+.bottom-nav-item.active::after {
+  content: ''; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%);
+  width: 4px; height: 4px; border-radius: 50%; background: var(--primary);
+}
+
+/* Tabs */
+.tab-content { display: none; animation: slideUp 0.4s var(--ease-spring) forwards; }
+.tab-content.active { display: block; }
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-up { animation: slideUp 0.6s var(--ease-spring) forwards; opacity: 0; }
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+
+/* Responsive */
+@media (min-width: 900px) {
+  .bottom-nav { display: none; }
+  .sidebar { display: block; }
+  body { padding-bottom: 0; }
+}
+
+@media (max-width: 600px) {
+  .target-card { padding: 24px; }
+  .target-amount { font-size: 32px; }
+  .main-content { padding: 16px; padding-bottom: 100px; }
+}
+</style>
+</head>
+<body>
+
+<div class="app-container">
+  
+  <!-- Sidebar for Desktop -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">2B</div>
+      <div>Partner</div>
+    </div>
+    <nav>
+      <a href="#" class="nav-item active" data-tab="tab-home"><i data-lucide="layout-dashboard"></i> الرئيسية</a>
+      <a href="#" class="nav-item" data-tab="tab-offers"><i data-lucide="ticket"></i> العروض</a>
+      <a href="#" class="nav-item" data-tab="tab-rewards"><i data-lucide="star"></i> مكافآتي</a>
+      <a href="#" class="nav-item" data-tab="tab-reports"><i data-lucide="bar-chart-2"></i> تقارير</a>
+      <a href="#" class="nav-item" data-tab="tab-profile"><i data-lucide="user"></i> حسابي</a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    
+    <!-- Header -->
+    <header class="header animate-up">
+      <div class="user-info">
+        <div class="avatar">أح</div>
+        <div class="greeting">
+          <span>أهلاً بك مرة أخرى،</span>
+          <strong>أحمد حسن</strong>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="icon-btn">
+          <i data-lucide="bell"></i>
+          <span class="badge"></span>
+        </button>
+        <button class="icon-btn" onclick="window.location.href='2b-partner-merchant-landing.html'">
+          <i data-lucide="log-out"></i>
+        </button>
+      </div>
+    </header>
+
+    <div id="tab-home" class="tab-content active">
+    <!-- Target Card -->
+    <div class="target-card animate-up delay-1">
+      <div class="target-header">
+        <div>
+          <div class="target-title">المبيعات المحققة (أغسطس)</div>
+          <div class="target-amount num-font">180,000 <span style="font-size: 18px; font-weight: 500;">ج.م</span></div>
+        </div>
+        <div class="tier-badge">
+          <i data-lucide="award" size="16"></i> قريب من الذهبي
+        </div>
+      </div>
+      
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div class="progress-fill"></div>
+        </div>
+        <div class="progress-stats">
+          <span>الهدف: 250,000 ج.م</span>
+          <span>المتبقي: 70,000 ج.م</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid animate-up delay-2">
+      <div class="stat-card gold">
+        <div class="stat-icon"><i data-lucide="star"></i></div>
+        <div>
+          <div class="stat-title">النجوم المكتسبة</div>
+          <div class="stat-value num-font">640</div>
+          <div class="stat-sub"><i data-lucide="trending-up" size="14"></i> +120 هذا الشهر</div>
+        </div>
+      </div>
+      <div class="stat-card blue">
+        <div class="stat-icon"><i data-lucide="gift"></i></div>
+        <div>
+          <div class="stat-title">البونص المتوقع</div>
+          <div class="stat-value num-font">1,500 <span style="font-size: 14px;">ج.م</span></div>
+          <div class="stat-sub">عند تحقيق التارجت</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Horizontal Scroll Section -->
+    <div class="animate-up delay-3">
+      <div class="section-title">
+        <h3>عروض مخصصة لك</h3>
+        <a href="#">عرض الكل</a>
+      </div>
+      
+      <div class="offers-scroll">
+        <div class="offer-card green">
+          <div class="offer-icon"><i data-lucide="percent"></i></div>
+          <h4>خصم إضافي 15%</h4>
+          <p>على الطلبية القادمة عند تجاوز 10,000 ج.م</p>
+          <button>استخدام العرض</button>
+        </div>
+        <div class="offer-card accent">
+          <div class="offer-icon"><i data-lucide="zap"></i></div>
+          <h4>نقاط مضاعفة</h4>
+          <p>احصل على ضعف النجوم على مبيعات الإكسسوارات هذا الأسبوع.</p>
+          <button>تفعيل الآن</button>
+        </div>
+      </div>
+    </div>
+    </div> <!-- End tab-home -->
+
+    <!-- Placeholder Tabs -->
+    <div id="tab-offers" class="tab-content">
+      <div class="section-title"><h3>جميع العروض</h3></div>
+      <div style="background:var(--surface); padding: 40px; border-radius: var(--radius-md); text-align:center; color: var(--text-muted);">قريباً... صفحة العروض الكاملة</div>
+    </div>
+    <div id="tab-rewards" class="tab-content">
+      <div class="section-title"><h3>مكافآتي</h3></div>
+      <div style="background:var(--surface); padding: 40px; border-radius: var(--radius-md); text-align:center; color: var(--text-muted);">قريباً... استبدال النجوم بهدايا</div>
+    </div>
+    <div id="tab-reports" class="tab-content">
+      <div class="section-title"><h3>التقارير والمبيعات</h3></div>
+      <div style="background:var(--surface); padding: 40px; border-radius: var(--radius-md); text-align:center; color: var(--text-muted);">قريباً... تقارير مفصلة للمبيعات</div>
+    </div>
+    <div id="tab-profile" class="tab-content">
+      <div class="section-title"><h3>حسابي</h3></div>
+      <div style="background:var(--surface); padding: 40px; border-radius: var(--radius-md); text-align:center; color: var(--text-muted);">قريباً... إعدادات الحساب</div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Bottom Navigation for Mobile -->
+<nav class="bottom-nav">
+  <a href="#" class="bottom-nav-item active" data-tab="tab-home">
+    <i data-lucide="layout-dashboard"></i>
+    <span>الرئيسية</span>
+  </a>
+  <a href="#" class="bottom-nav-item" data-tab="tab-offers">
+    <i data-lucide="ticket"></i>
+    <span>العروض</span>
+  </a>
+  <a href="#" class="bottom-nav-item" data-tab="tab-rewards">
+    <i data-lucide="star"></i>
+    <span>مكافآتي</span>
+  </a>
+  <a href="#" class="bottom-nav-item" data-tab="tab-profile">
+    <i data-lucide="user"></i>
+    <span>حسابي</span>
+  </a>
+</nav>
+
+<script>
+  lucide.createIcons();
+  
+  // Tab Switching Logic
+  const navItems = document.querySelectorAll('.nav-item, .bottom-nav-item');
+  const tabContents = document.querySelectorAll('.tab-content');
+
+  navItems.forEach(item => {
+    item.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = item.getAttribute('data-tab');
+      if(!targetId) return;
+
+      // Update active nav items
+      navItems.forEach(nav => {
+        if(nav.getAttribute('data-tab') === targetId) {
+          nav.classList.add('active');
+        } else {
+          nav.classList.remove('active');
+        }
+      });
+
+      // Update active tab content
+      tabContents.forEach(tab => {
+        if(tab.id === targetId) {
+          tab.classList.add('active');
+        } else {
+          tab.classList.remove('active');
+        }
+      });
+    });
+  });
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').then((registration) => {
+        console.log('SW registered');
+      });
+    });
+  }
+</script>
+</body>
+</html>
