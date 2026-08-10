@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f172a">
+<title>2B Partner | لوحة تحكم الإدارة</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.383.0/dist/umd/lucide.min.js"></script>
+
+<style>
+:root {
+  --admin-primary: #0f172a;
+  --admin-accent: #38bdf8;
+  --bg-color: #f1f5f9;
+  --surface: #ffffff;
+  --surface-hover: #f8fafc;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --radius-lg: 20px;
+  --radius-md: 12px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: 'IBM Plex Sans Arabic', system-ui, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  line-height: 1.5;
+}
+
+h1, h2, h3, .num-font { font-family: 'Outfit', 'IBM Plex Sans Arabic', sans-serif; }
+a { text-decoration: none; color: inherit; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+/* Admin Header (Dark) */
+.admin-header {
+  background: var(--admin-primary);
+  color: white;
+  padding: 24px;
+  padding-bottom: 60px;
+  border-bottom-left-radius: 32px;
+  border-bottom-right-radius: 32px;
+}
+.header-top {
+  display: flex; justify-content: space-between; align-items: center;
+  max-width: 1200px; margin: 0 auto;
+  margin-bottom: 24px;
+}
+.header-title { font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+.header-title i { color: var(--admin-accent); }
+
+.logout-btn {
+  color: white; opacity: 0.8;
+  display: flex; align-items: center; gap: 8px; font-size: 14px;
+  transition: 0.2s;
+}
+.logout-btn:hover { opacity: 1; }
+
+.overall-stats {
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+}
+.stat-box {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+}
+.stat-box p { font-size: 13px; opacity: 0.8; margin-bottom: 4px; }
+.stat-box h3 { font-size: 28px; font-weight: 800; color: var(--admin-accent); }
+
+/* Main Content area pulled up */
+.main-container {
+  max-width: 1200px; margin: 0 auto;
+  padding: 0 20px;
+  margin-top: -30px;
+}
+
+/* Controls (Search & Filter) */
+.controls-bar {
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  box-shadow: var(--shadow-md);
+  display: flex; gap: 16px; align-items: center;
+  margin-bottom: 24px;
+}
+.search-box {
+  flex: 1; display: flex; align-items: center; gap: 10px;
+  background: var(--bg-color); padding: 12px 16px; border-radius: 8px;
+}
+.search-box input {
+  border: none; background: transparent; outline: none; width: 100%;
+  font-size: 14px; color: var(--text-main);
+}
+.filter-btn {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--admin-primary); color: white;
+  padding: 12px 20px; border-radius: 8px; font-weight: 600; font-size: 14px;
+}
+
+/* Merchants List */
+.merchants-list {
+  display: grid; gap: 16px;
+  padding-bottom: 40px;
+}
+.merchant-card {
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .merchant-card {
+    flex-direction: row; align-items: center; justify-content: space-between;
+  }
+}
+
+.merchant-info { display: flex; align-items: center; gap: 16px; flex: 1; }
+.merchant-avatar {
+  width: 50px; height: 50px; border-radius: 12px;
+  background: #e0f2fe; color: #0369a1;
+  display: grid; place-items: center; font-size: 18px; font-weight: 700;
+}
+.merchant-details h4 { font-size: 16px; margin-bottom: 2px; }
+.merchant-details p { font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
+
+.merchant-progress-wrap { flex: 1.5; min-width: 250px; }
+.merchant-progress-stats {
+  display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px; font-weight: 600;
+}
+.progress-bar {
+  height: 8px; background: var(--bg-color); border-radius: 99px; overflow: hidden;
+}
+.progress-fill { height: 100%; border-radius: 99px; }
+.fill-high { background: var(--success); width: 85%; }
+.fill-med { background: var(--warning); width: 45%; }
+.fill-low { background: #ef4444; width: 15%; }
+
+.merchant-action { display: flex; justify-content: flex-end; }
+.btn-view {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 16px; border: 1px solid var(--border); border-radius: 8px;
+  font-size: 12px; font-weight: 600; color: var(--text-main);
+}
+.btn-view:hover { background: var(--surface-hover); }
+
+</style>
+</head>
+<body>
+
+  <header class="admin-header">
+    <div class="header-top">
+      <div class="header-title">
+        <i data-lucide="shield-check"></i> 2B Partner | الإدارة
+      </div>
+      <button class="logout-btn" onclick="window.location.href='2b-partner-merchant-landing.html'">
+        <i data-lucide="log-out" size="18"></i> خروج
+      </button>
+    </div>
+    
+    <div class="overall-stats">
+      <div class="stat-box">
+        <p>إجمالي المبيعات (الشهر)</p>
+        <h3 class="num-font">4,250,000 <span style="font-size: 14px; font-weight: 500; color: white;">ج.م</span></h3>
+      </div>
+      <div class="stat-box">
+        <p>التجار النشطين</p>
+        <h3 class="num-font">128</h3>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-container">
+    
+    <div class="controls-bar">
+      <div class="search-box">
+        <i data-lucide="search" size="18" style="color:var(--text-muted)"></i>
+        <input type="text" placeholder="ابحث بالاسم أو رقم الهاتف...">
+      </div>
+      <button class="filter-btn">
+        <i data-lucide="sliders-horizontal" size="16"></i> فلتر
+      </button>
+    </div>
+
+    <div class="merchants-list">
+      
+      <!-- Merchant 1 -->
+      <div class="merchant-card">
+        <div class="merchant-info">
+          <div class="merchant-avatar">أح</div>
+          <div class="merchant-details">
+            <h4>أحمد حسن (الفرع الرئيسي)</h4>
+            <p><i data-lucide="map-pin" size="12"></i> القاهرة، مدينة نصر &nbsp; | &nbsp; <i data-lucide="phone" size="12"></i> 010XXXXXX</p>
+          </div>
+        </div>
+        
+        <div class="merchant-progress-wrap">
+          <div class="merchant-progress-stats">
+            <span>المحقق: 180K</span>
+            <span>الهدف: 200K</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill fill-high"></div>
+          </div>
+        </div>
+
+        <div class="merchant-action">
+          <button class="btn-view">التفاصيل <i data-lucide="chevron-left" size="14"></i></button>
+        </div>
+      </div>
+
+      <!-- Merchant 2 -->
+      <div class="merchant-card">
+        <div class="merchant-info">
+          <div class="merchant-avatar" style="background: #fef3c7; color: #d97706;">مح</div>
+          <div class="merchant-details">
+            <h4>محمود ستور</h4>
+            <p><i data-lucide="map-pin" size="12"></i> الجيزة، الدقي &nbsp; | &nbsp; <i data-lucide="phone" size="12"></i> 011XXXXXX</p>
+          </div>
+        </div>
+        
+        <div class="merchant-progress-wrap">
+          <div class="merchant-progress-stats">
+            <span>المحقق: 45K</span>
+            <span>الهدف: 100K</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill fill-med"></div>
+          </div>
+        </div>
+
+        <div class="merchant-action">
+          <button class="btn-view">التفاصيل <i data-lucide="chevron-left" size="14"></i></button>
+        </div>
+      </div>
+      
+      <!-- Merchant 3 -->
+      <div class="merchant-card">
+        <div class="merchant-info">
+          <div class="merchant-avatar" style="background: #fee2e2; color: #b91c1c;">عص</div>
+          <div class="merchant-details">
+            <h4>عصام تك</h4>
+            <p><i data-lucide="map-pin" size="12"></i> الإسكندرية، سموحة &nbsp; | &nbsp; <i data-lucide="phone" size="12"></i> 012XXXXXX</p>
+          </div>
+        </div>
+        
+        <div class="merchant-progress-wrap">
+          <div class="merchant-progress-stats">
+            <span>المحقق: 15K</span>
+            <span>الهدف: 100K</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill fill-low"></div>
+          </div>
+        </div>
+
+        <div class="merchant-action">
+          <button class="btn-view">التفاصيل <i data-lucide="chevron-left" size="14"></i></button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+<script>
+  lucide.createIcons();
+  
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').then((registration) => {
+        console.log('SW registered');
+      });
+    });
+  }
+</script>
+</body>
+</html>
